@@ -16,6 +16,9 @@
 
 package com.codelab.basiclayouts.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF6B5C4D)
@@ -34,7 +37,8 @@ val md_theme_light_error = Color(0xFFBA1A1A)
 val md_theme_light_errorContainer = Color(0xFFFFDAD6)
 val md_theme_light_onError = Color(0xFFFFFFFF)
 val md_theme_light_onErrorContainer = Color(0xFF410002)
-val md_theme_light_background = Color(0xFFF5F0EE)
+val md_theme_light_background = Color(0xFFF8F8F8)
+val letraClara = Color(0xFFF8F8F8)
 val md_theme_light_onBackground = Color(0xFF1D1B1A)
 val md_theme_light_surface = Color(0xFFFFFBFF)
 val md_theme_light_onSurface = Color(0xFF1D1B1A)
@@ -60,6 +64,7 @@ val md_theme_dark_errorContainer = Color(0xFF93000A)
 val md_theme_dark_onError = Color(0xFF690005)
 val md_theme_dark_onErrorContainer = Color(0xFFFFB4AB)
 val md_theme_dark_background = Color(0xFF32302F)
+val letraOscura = Color(0xFF32302F)
 val md_theme_dark_onBackground = Color(0xFFE6E1E0)
 val md_theme_dark_surface = Color(0xFF1D1B1A)
 val md_theme_dark_onSurface = Color(0xFFE6E1E0)
@@ -77,3 +82,19 @@ val Navy = Color(0xFF073042)
 val Blue = Color(0xFF4285F4)
 val LightBlue = Color(0xFFD7EFFE)
 val Chartreuse = Color(0xFFEFF7CF)
+
+@Composable
+fun AppTheme(
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable() () -> Unit
+) {
+    val colors = if (!useDarkTheme) {
+        LightColors
+    } else {
+        DarkColors
+    }
+    MaterialTheme(
+        colorScheme = colors,
+        content = content
+    )
+}

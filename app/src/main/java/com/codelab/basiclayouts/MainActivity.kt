@@ -16,9 +16,6 @@
 
 package com.codelab.basiclayouts
 
-import android.R.attr.background
-import android.R.attr.color
-import android.R.id.background
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -36,10 +33,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextFieldDefaults.colors
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -55,9 +53,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
-import com.codelab.basiclayouts.ui.theme.md_theme_dark_background
-import com.codelab.basiclayouts.ui.theme.md_theme_light_background
-import com.codelab.basiclayouts.ui.theme.md_theme_light_onBackground
 import com.example.basicscodelab.MyApp
 
 class MainActivity : ComponentActivity() {
@@ -84,17 +79,10 @@ fun SearchBar(
         Icon(
             imageVector = Icons.Default.Search, contentDescription = null
         )
-    }, colors = TextFieldDefaults.colors(
-            
-            when (background(Color)) {
-                (color == md_theme_light_background) -> Color.White
-                color == md_theme_light_background -> Color.Black
-                else -> Color.White
-
-            }
+    }, colors = colors(
     ), placeholder = {
         Text(stringResource(R.string.placeholder_search))
-    }, modifier = modifier
+    }, singleLine = true, modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 56.dp)
     )
@@ -111,9 +99,10 @@ fun MySootheAppLandscape() {
                 SootheNavigationRail(
                     isProfileButtonClicked = isProfileButtonClicked,
                     onButtonClicked = { isProfileButtonClicked = it })
-                when (isProfileButtonClicked) {
-                    true -> MyApp()
-                    false -> HomeScreen()
+                if (isProfileButtonClicked) {
+                    MyApp()
+                } else {
+                    HomeScreen()
                 }
             }
         }
@@ -123,27 +112,29 @@ fun MySootheAppLandscape() {
 // Step: MySoothe App - Scaffold
 @Composable
 fun MySootheAppPortrait() {
+    var isProfileButtonClicked by rememberSaveable { mutableStateOf(false) }
     MySootheTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            Column(){var buttonClicked by rememberSaveable { mutableStateOf(false) }
-            Column {
-                if (buttonClicked) {
+        Scaffold(containerColor = MaterialTheme.colorScheme.background, bottomBar = {
+            SootheBottomNavigation(
+                buttonClicked = isProfileButtonClicked,
+                onButtonClicked = { isProfileButtonClicked = it },
+                modifier = Modifier.background(color = Color(0xFF694832))
+            )
+        }) { paddingValues ->
+
+            Column(modifier = Modifier.padding(paddingValues)) {
+                if (isProfileButtonClicked) {
                     MyApp(modifier = Modifier)
                 } else {
                     HomeScreen(modifier = Modifier)
                 }
-                 }
                 Spacer(
                     Modifier
                         .background(Color.Red)
                         .weight(1f)
-                    )
-                Log.d("Jhona", "Hola")
-                SootheBottomNavigation(
-                    buttonClicked = buttonClicked,
-                    onButtonClicked = { buttonClicked = it },
-                    modifier = Modifier
                 )
+                Log.d("Jhona", "Hola")
+
             }
         }
     }
